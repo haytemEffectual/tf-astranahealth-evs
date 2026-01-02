@@ -7,3 +7,4 @@ domain_name = "corp.Astrana.com"
 domain_short_name = "CORP"
 ad_dns_ips = ["10.1.10.10", "10.1.10.11"]
 ad_connector_username = "svc-adconnector"   
+project_region = "us-west-2"
