@@ -3,7 +3,11 @@ variable "aws_region" {
   default = "us-west-2"
 }
 
-# TODO: uncomment and set VPC_CIDR if the VPC is needed to be created via TF
-# variable "vpc_cidr" {
-#   type = string
-# }
+# uncomment and set VPC_CIDR if the VPC is needed to be created via TF
+variable "vpc1_cidr" {
+  type = string
+}
+
+variable "vpc2_cidr" {
+  type = string
+}
