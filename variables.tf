@@ -1,7 +1,7 @@
-variable "aws_region" {
-  type    = string
-  default = "us-west-2"
-}
+# variable "project_region" {
+#   type    = string
+#   default = "us-west-2"
+# }
 
 
 
@@ -15,12 +15,20 @@ variable "aws_region" {
 #   description = "VPC2 ID where WorkSpaces will be deployed"
 #   type        = string
 # }
-
-variable "vpc1_cidr" {
+variable "environment" {
+  description = "Deployment environment (e.g., dev, prod)"
+  validation {
+    condition     = can(regex("^(dev|prod|staging)$", var.environment))
+    error_message = "Environment must be one of: dev, prod, staging."
+  }
+  type    = string
+  default = "dev"
+}
+variable "evs_vpc_cidr" {
   type = string
 }
 
-variable "vpc2_cidr" {
+variable "workspaces_vpc_cidr" {
   type = string
 }
 
