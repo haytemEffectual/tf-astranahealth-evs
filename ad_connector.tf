@@ -24,10 +24,10 @@ resource "aws_directory_service_directory" "ad_connector" {
   }
 }
 
-# Wait for AD Connector to be active
+# Wait for AD Connector to be activated
 resource "time_sleep" "wait_for_ad_connector" {
   depends_on      = [aws_directory_service_directory.ad_connector]
-  create_duration = "300s" # Wait 5 minutes for AD Connector to be ready
+  create_duration = "420s" # Wait 7 minutes for AD Connector to be ready
 }
 
 #######  Security Group for AD Connector in WorkSpaces VPC

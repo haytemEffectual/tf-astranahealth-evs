@@ -51,6 +51,11 @@ variable "domain_short_name" {
   type        = string
   default     = "CORP"
 }
+
+variable "default_ou" {
+  description = "Default Organizational Unit for WorkSpaces"
+  type        = string
+}
 variable "ad_dns_ips" {
   description = "DNS IP addresses of AD servers in VPC1"
   type        = list(string)
