@@ -41,84 +41,84 @@ resource "aws_security_group" "ad_connector" {
     from_port   = 53
     to_port     = 53
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "DNS UDP to EVS VPC"
     from_port   = 53
     to_port     = 53
     protocol    = "udp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "Kerberos to EVS VPC"
     from_port   = 88
     to_port     = 88
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "Kerberos UDP to EVS VPC"
     from_port   = 88
     to_port     = 88
     protocol    = "udp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "RPC Endpoint Mapper to EVS VPC"
     from_port   = 135
     to_port     = 135
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "LDAP to EVS VPC"
     from_port   = 389
     to_port     = 389
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "LDAP UDP to EVS VPC"
     from_port   = 389
     to_port     = 389
     protocol    = "udp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "SMB to EVS VPC"
     from_port   = 445
     to_port     = 445
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "Kerberos Change Password to EVS VPC"
     from_port   = 464
     to_port     = 464
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "LDAPS to EVS VPC"
     from_port   = 636
     to_port     = 636
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "Global Catalog to EVS VPC"
     from_port   = 3268
     to_port     = 3269
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   egress {
     description = "Dynamic RPC to EVS VPC"
     from_port   = 1024
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = [var.vpc1_cidr]
+    cidr_blocks = [var.evs_vpc_cidr]
   }
   # HTTPS outbound for WorkSpaces agent registration and management communication
   # NOTE: Requires NAT Gateway or type of connection to the internet in VPC2 to route 0.0.0.0/0 traffic from private subnets to internet
