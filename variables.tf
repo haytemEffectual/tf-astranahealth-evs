@@ -1,12 +1,11 @@
-# variable "project_region" {
-#   type    = string
-#   default = "us-west-2"
-# }
-
-
-
 # ----------------------------------
 # Variables
+
+variable "aws_region" {
+  description = "AWS region for the provider"
+  type        = string
+  default     = "us-west-2"
+}
 # variable "vpc1_id" {
 #   description = "VPC1 ID where AD service exists"
 #   type        = string

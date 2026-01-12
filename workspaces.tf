@@ -1,5 +1,41 @@
 
-# Register Directory with WorkSpaces
+################### Security Group for WorkSpaces
+resource "aws_security_group" "workspaces" {
+  name_prefix = "workspaces-"
+  description = "Security group for WorkSpaces instances"
+  vpc_id      = var.vpc2_id
+  # Allow inbound from WorkSpaces service
+  ingress {
+    description = "WorkSpaces Management"
+    from_port   = 0
+    to_port     = 65535
+    protocol    = "tcp"
+    cidr_blocks = [var.vpc2_cidr]
+  }
+  # Allow outbound to AD Connector
+  egress {
+    description     = "To AD Connector"
+    from_port       = 0
+    to_port         = 65535
+    protocol        = "tcp"
+    security_groups = [aws_security_group.ad_connector.id]
+  }
+  # Allow HTTPS outbound
+  egress {
+    description = "HTTPS outbound"
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name        = "WorkSpaces-SG"
+    Environment = "Production"
+  }
+}
+
+
+#######################  Register Directory with WorkSpaces
 resource "aws_workspaces_directory" "main" {
   depends_on   = [time_sleep.wait_for_ad_connector]
   directory_id = aws_directory_service_directory.ad_connector.id

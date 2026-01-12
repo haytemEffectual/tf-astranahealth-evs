@@ -1,4 +1,5 @@
 # here will be project specific variables
+aws_region            = "us-west-2"
 environment           = "dev"
 on_premises_cidr      = "192.168.0.0/16"
 transit_gateway_id    = "tgw-0abcd1234efgh5678"

@@ -42,9 +42,6 @@ jobs:
         with:
           terraform_wrapper: false
 
-      - name: Terraform Validate (pre-init)
-        run: terraform validate
-
       - name: Terraform Init (S3 backend)
         run: |
           terraform init \
@@ -53,6 +50,9 @@ jobs:
             -backend-config="region=${AWS_REGION}" \
             -backend-config="dynamodb_table=${TF_BACKEND_DDB_TABLE}"\
             -backend-config="encrypt=true"
+
+      - name: Terraform Validate (pre-init)
+        run: terraform validate
 
       - name: Format Check
         run: terraform fmt -check -diff
