@@ -18,6 +18,7 @@ resource "aws_directory_service_directory" "ad_connector" {
     customer_dns_ips  = var.ad_dns_ips
     customer_username = var.ad_connector_username
   }
+  password = var.ad_connector_password
   tags = {
     Name        = "WorkSpaces-AD-Connector"
     Environment = var.environment

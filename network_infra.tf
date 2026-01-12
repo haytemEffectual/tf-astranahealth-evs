@@ -6,7 +6,7 @@
 ## 
 ## This file will be configuring and creating the following resources: 
 ##  1- VPC1 (EVS) and VPC2 (WorkSpaces)
-##  2- VPC Peering between VPC1 and VPC2
+##  2- VPC Peering between VPC1 (EVS) and VPC2 (WorkSpaces)
 ##  3- Subnets in both VPCs
 ##  4- Route tables and associations
 ##  5- Routes for VPC peering and Transit Gateway
@@ -65,8 +65,8 @@ data "aws_vpc" "workspaces" {
 #####################################################################################
 ############################# CONFIGURING VPC PEERING CONNECTION ####################
 #####################################################################################
-####  Create VPC peering connection between VPC1 and VPC2
-resource "aws_vpc_peering_connection" "vpc1_vpc2" {
+####  Create VPC peering connection between VPC1 (EVS) and VPC2 (WorkSpaces)
+resource "aws_vpc_peering_connection" "evsvpc_workspacesvpc" {
   vpc_id      = data.aws_vpc.evs.id
   peer_vpc_id = data.aws_vpc.workspaces.id
   peer_region = "us-west-2"
@@ -77,8 +77,8 @@ resource "aws_vpc_peering_connection" "vpc1_vpc2" {
   }
 }
 #### Enable DNS resolution for VPC peering
-resource "aws_vpc_peering_connection_options" "vpc1_vpc2" {
-  vpc_peering_connection_id = aws_vpc_peering_connection.vpc1_vpc2.id
+resource "aws_vpc_peering_connection_options" "evsvpc_workspacesvpc" {
+  vpc_peering_connection_id = aws_vpc_peering_connection.evsvpc_workspacesvpc.id
   requester {
     allow_remote_vpc_dns_resolution = true
   }
@@ -138,36 +138,36 @@ resource "aws_route_table_association" "workspaces_vpc_subnets" {
 
 
 
-#### Add peering routes to VPC1 route tables
-resource "aws_route" "vpc1_to_vpc2" {
+#### Add peering routes to VPC1 (EVS) route tables
+resource "aws_route" "evsvpc_to_workspacesvpc" {
   route_table_id            = aws_route_table.evs_vpc_private_rt.id
   destination_cidr_block    = var.workspaces_vpc_cidr
-  vpc_peering_connection_id = aws_vpc_peering_connection.vpc1_vpc2.id
+  vpc_peering_connection_id = aws_vpc_peering_connection.evsvpc_workspacesvpc.id
 }
 
 
-#### Add peering routes to VPC2 route tables
-resource "aws_route" "vpc2_to_vpc1" {
+#### Add peering routes to VPC2 (WorkSpaces) route tables
+resource "aws_route" "workspacesvpc_to_evsvpc" {
   route_table_id            = aws_route_table.workspaces_vpc_private_rt.id
   destination_cidr_block    = var.evs_vpc_cidr
-  vpc_peering_connection_id = aws_vpc_peering_connection.vpc1_vpc2.id
+  vpc_peering_connection_id = aws_vpc_peering_connection.evsvpc_workspacesvpc.id
 }
 
 
 #### Add TGW routes for on-premises access
-resource "aws_route" "vpc1_default_route" {
+resource "aws_route" "evsvpc_default_route" {
   route_table_id         = aws_route_table.evs_vpc_private_rt.id
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = var.transit_gateway_id
 }
-resource "aws_route" "vpc2_default_route" {
+resource "aws_route" "workspacesvpc_default_route" {
   route_table_id         = aws_route_table.workspaces_vpc_private_rt.id
   destination_cidr_block = "0.0.0.0/0"
   transit_gateway_id     = var.transit_gateway_id
 }
 
 
-#### Create DHCP Options Set for workspaces VPC to point to VPC1 AD DNS IPs
+#### Create DHCP Options Set for workspaces VPC to point to EVS VPC AD DNS IPs
 resource "aws_vpc_dhcp_options" "workspaces_vpc" {
   domain_name         = var.domain_name
   domain_name_servers = var.ad_dns_ips

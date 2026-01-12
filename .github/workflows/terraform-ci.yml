@@ -21,8 +21,9 @@ env:
   TF_BACKEND_KEY: ${{ vars.TF_BACKEND_S3_KEY }}
   TF_BACKEND_DDB_TABLE: ${{ vars.TF_BACKEND_DDB_TABLE }}
   AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
-  TF_VAR_vpc1_cidr: ${{ vars.VPC1_CIDR }}
-  TF_VAR_vpc2_cidr: ${{ vars.VPC2_CIDR }}
+  TF_VAR_EVS_VPC_CIDR: ${{ vars.EVS_VPC_CIDR }}
+  TF_VAR_WORKSPACES_VPC_CIDR: ${{ vars.WORKSPACES_VPC_CIDR }}
+  TF_VAR_AD_CONNECTOR_PASSWORD: ${{ secrets.AD_CONNECTOR_PASSWORD }}
 
 jobs:
   Terraform:

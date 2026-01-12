@@ -6,14 +6,7 @@ variable "aws_region" {
   type        = string
   default     = "us-west-2"
 }
-# variable "vpc1_id" {
-#   description = "VPC1 ID where AD service exists"
-#   type        = string
-# }
-# variable "vpc2_id" {
-#   description = "VPC2 ID where WorkSpaces will be deployed"
-#   type        = string
-# }
+
 variable "environment" {
   description = "Deployment environment (e.g., dev, prod)"
   validation {
@@ -56,7 +49,7 @@ variable "default_ou" {
   type        = string
 }
 variable "ad_dns_ips" {
-  description = "DNS IP addresses of AD servers in VPC1"
+  description = "DNS IP addresses of AD servers in EVS VPC"
   type        = list(string)
   default     = ["10.1.10.10", "10.1.10.11"]
 }
@@ -65,13 +58,12 @@ variable "ad_connector_username" {
   type        = string
   default     = "svc-adconnector"
 }
-# Data sources for existing resources
-# data "aws_vpc" "vpc1" {
-#   id = var.vpc1_id
-# }
-# data "aws_vpc" "vpc2" {
-#   id = var.vpc2_id
-# }
+variable "ad_connector_password" {
+  description = "Service account password for AD Connector"
+  type        = string
+  sensitive   = true
+}
+
 data "aws_availability_zones" "available" {
   state = "available"
   filter {

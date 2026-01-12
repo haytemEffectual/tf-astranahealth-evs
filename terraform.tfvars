@@ -10,3 +10,4 @@ domain_short_name     = "CORP"
 default_ou            = "OU=WorkSpaces,DC=corp,DC=example,DC=com"
 ad_dns_ips            = ["10.1.10.10", "10.1.10.11"]
 ad_connector_username = "svc-adconnector"
+# ad_connector_password = " this should be provided via GitHub Secrets"

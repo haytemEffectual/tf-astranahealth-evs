@@ -3,14 +3,14 @@
 resource "aws_security_group" "workspaces" {
   name_prefix = "workspaces-"
   description = "Security group for WorkSpaces instances"
-  vpc_id      = var.vpc2_id
+  vpc_id      = aws_vpc.workspaces.id
   # Allow inbound from WorkSpaces service
   ingress {
     description = "WorkSpaces Management"
     from_port   = 0
     to_port     = 65535
     protocol    = "tcp"
-    cidr_blocks = [var.vpc2_cidr]
+    cidr_blocks = [var.workspaces_vpc_cidr]
   }
   # Allow outbound to AD Connector
   egress {
