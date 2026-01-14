@@ -124,6 +124,7 @@ resource "aws_security_group" "ad_connector" {
   # HTTPS outbound for WorkSpaces agent registration and management communication
   # NOTE: Requires NAT Gateway or type of connection to the internet in VPC2 to route 0.0.0.0/0 traffic from private subnets to internet
   # TODO: create NAT Gateway in network_infra.tf if not already present  or route through Transit Gateway if it provides internet access
+  # trivy:ignore:AVD-AWS-0104
   egress {
     description = "HTTPS outbound"
     from_port   = 443

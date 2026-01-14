@@ -21,12 +21,13 @@ resource "aws_security_group" "workspaces" {
     security_groups = [aws_security_group.ad_connector.id]
   }
   # Allow HTTPS outbound
+  # trivy:ignore:AVD-AWS-0104
   egress {
     description = "HTTPS outbound"
     from_port   = 443
     to_port     = 443
     protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = ["0.0.0.0/0"] # TODO: Restrict to AWS WorkSpaces managed prefix list for better security
   }
   tags = {
     Name        = "WorkSpaces-SG"
