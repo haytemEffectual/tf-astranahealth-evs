@@ -48,6 +48,7 @@ resource "aws_vpc" "workspaces" {
 
 # Data sources to read the VPC IDs created above
 data "aws_vpc" "evs" {
+  depends_on = [aws_vpc.evs]
   filter {
     name   = "tag:Application"
     values = ["evs"]
@@ -55,6 +56,7 @@ data "aws_vpc" "evs" {
 }
 
 data "aws_vpc" "workspaces" {
+  depends_on = [aws_vpc.workspaces]
   filter {
     name   = "tag:Application"
     values = ["workspaces"]
