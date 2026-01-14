@@ -31,6 +31,12 @@ variable "transit_gateway_id" {
   description = "Transit Gateway ID"
   type        = string
 }
+
+variable "create_tgw_attachments" {
+  description = "Whether to create TGW VPC attachments for EVS and WorkSpaces VPCs"
+  type        = bool
+  default     = true
+}
 variable "domain_name" {
   description = "Active Directory domain name"
   type        = string

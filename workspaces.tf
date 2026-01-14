@@ -4,35 +4,44 @@ resource "aws_security_group" "workspaces" {
   name_prefix = "workspaces-"
   description = "Security group for WorkSpaces instances"
   vpc_id      = aws_vpc.workspaces.id
-  # Allow inbound from WorkSpaces service
-  ingress {
-    description = "WorkSpaces Management"
-    from_port   = 0
-    to_port     = 65535
-    protocol    = "tcp"
-    cidr_blocks = [var.workspaces_vpc_cidr]
-  }
-  # Allow outbound to AD Connector
-  egress {
-    description     = "To AD Connector"
-    from_port       = 0
-    to_port         = 65535
-    protocol        = "tcp"
-    security_groups = [aws_security_group.ad_connector.id]
-  }
-  # Allow HTTPS outbound
-  # trivy:ignore:AVD-AWS-0104
-  egress {
-    description = "HTTPS outbound"
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"] # TODO: Restrict to AWS WorkSpaces managed prefix list for better security
-  }
   tags = {
     Name        = "WorkSpaces-SG"
     Environment = "Production"
   }
+}
+
+# Ingress: allow WorkSpaces management within VPC
+resource "aws_security_group_rule" "workspaces_ingress_management" {
+  type              = "ingress"
+  from_port         = 0
+  to_port           = 65535
+  protocol          = "tcp"
+  cidr_blocks       = [var.workspaces_vpc_cidr]
+  security_group_id = aws_security_group.workspaces.id
+  description       = "WorkSpaces Management"
+}
+
+# Egress: allow traffic to AD Connector SG
+resource "aws_security_group_rule" "workspaces_egress_to_ad_connector" {
+  type                     = "egress"
+  from_port                = 0
+  to_port                  = 65535
+  protocol                 = "tcp"
+  source_security_group_id = aws_security_group.ad_connector.id
+  security_group_id        = aws_security_group.workspaces.id
+  description              = "To AD Connector"
+}
+
+# Egress: allow HTTPS outbound
+# trivy:ignore:AVD-AWS-0104
+resource "aws_security_group_rule" "workspaces_egress_https" {
+  type              = "egress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  cidr_blocks       = ["0.0.0.0/0"]
+  security_group_id = aws_security_group.workspaces.id
+  description       = "HTTPS outbound"
 }
 
 
