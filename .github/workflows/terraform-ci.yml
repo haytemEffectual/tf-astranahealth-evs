@@ -15,14 +15,12 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  TF_IN_AUTOMATION: "true"
   AWS_REGION: ${{ vars.AWS_REGION }}
   TF_BACKEND_BUCKET: ${{ vars.TF_BACKEND_S3_BUCKET }}
   TF_BACKEND_KEY: ${{ vars.TF_BACKEND_S3_KEY }}
   TF_BACKEND_DDB_TABLE: ${{ vars.TF_BACKEND_DDB_TABLE }}
   AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
-  TF_VAR_vpc1_cidr: ${{ vars.VPC1_CIDR }}
-  TF_VAR_vpc2_cidr: ${{ vars.VPC2_CIDR }}
+  TF_VAR_ad_connector_password: ${{ secrets.AD_CONNECTOR_PASSWORD }}
 
 jobs:
   Terraform:
@@ -50,6 +48,9 @@ jobs:
             -backend-config="region=${AWS_REGION}" \
             -backend-config="dynamodb_table=${TF_BACKEND_DDB_TABLE}"\
             -backend-config="encrypt=true"
+
+      - name: Terraform Validate (pre-init)
+        run: terraform validate
 
       - name: Format Check
         run: terraform fmt -check -diff
