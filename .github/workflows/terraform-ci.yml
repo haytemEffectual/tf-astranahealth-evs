@@ -15,14 +15,11 @@ concurrency:
   cancel-in-progress: true
 
 env:
-  # TF_IN_AUTOMATION: "true"
   AWS_REGION: ${{ vars.AWS_REGION }}
   TF_BACKEND_BUCKET: ${{ vars.TF_BACKEND_S3_BUCKET }}
   TF_BACKEND_KEY: ${{ vars.TF_BACKEND_S3_KEY }}
   TF_BACKEND_DDB_TABLE: ${{ vars.TF_BACKEND_DDB_TABLE }}
   AWS_ROLE_ARN: ${{ secrets.AWS_ROLE_ARN }}
-  # TF_VAR_EVS_VPC_CIDR: ${{ vars.EVS_VPC_CIDR }}
-  # TF_VAR_WORKSPACES_VPC_CIDR: ${{ vars.WORKSPACES_VPC_CIDR }}
   TF_VAR_ad_connector_password: ${{ secrets.AD_CONNECTOR_PASSWORD }}
 
 jobs:

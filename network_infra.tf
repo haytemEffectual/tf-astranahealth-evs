@@ -192,9 +192,22 @@ resource "aws_vpc_dhcp_options_association" "workspaces_vpc" {
 # TODO: update the VPC attachments - remove the attachmet resource in prod, this should be pre-existed 
 # you will only need to keeep the datasources re read the existing attachment ids 
 
-# Create TGW VPC attachment for EVS-VPC when enabled
+# Get existing TGW VPC attachment for EVS-VPC (if exists)
+data "aws_ec2_transit_gateway_vpc_attachments" "evs" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.evs.id]
+  }
+  filter {
+    name   = "transit-gateway-id"
+    values = [var.transit_gateway_id]
+  }
+}
+
+# Create TGW VPC attachment for EVS-VPC (if it doesn't exist)
 resource "aws_ec2_transit_gateway_vpc_attachment" "evs-vpc" {
-  count              = var.create_tgw_attachments ? 1 : 0
+  count = length(data.aws_ec2_transit_gateway_vpc_attachments.evs.ids) == 0 ? 1 : 0
+  # You'll need to provide EVS VPC TGW subnet IDs
   subnet_ids         = aws_subnet.evs_vpc_subnets[*].id
   transit_gateway_id = var.transit_gateway_id
   vpc_id             = data.aws_vpc.evs.id
@@ -204,9 +217,21 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "evs-vpc" {
   }
 }
 
-# Create TGW VPC attachment for workspaces-VPC when enabled
+# Get existing TGW VPC attachment for workspaces-VPC (if exists)
+data "aws_ec2_transit_gateway_vpc_attachments" "workspaces" {
+  filter {
+    name   = "vpc-id"
+    values = [data.aws_vpc.workspaces.id]
+  }
+  filter {
+    name   = "transit-gateway-id"
+    values = [var.transit_gateway_id]
+  }
+}
+# Create TGW VPC attachment for workspaces-VPC (if it doesn't exist)
 resource "aws_ec2_transit_gateway_vpc_attachment" "workspaces" {
-  count              = var.create_tgw_attachments ? 1 : 0
+  count = length(data.aws_ec2_transit_gateway_vpc_attachments.workspaces.ids) == 0 ? 1 : 0
+  # You'll need to provide EVS VPC TGW subnet IDs
   subnet_ids         = aws_subnet.workspaces_vpc_subnets[*].id
   transit_gateway_id = var.transit_gateway_id
   vpc_id             = data.aws_vpc.workspaces.id
