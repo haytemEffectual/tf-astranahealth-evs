@@ -12,13 +12,13 @@ resource "aws_directory_service_directory" "ad_connector" {
   description = "AD Connector for WorkSpaces"
   size        = "Large"
   type        = "ADConnector"
+  password    = var.ad_connector_password
   connect_settings {
     vpc_id            = aws_vpc.workspaces.id
     subnet_ids        = aws_subnet.workspaces_vpc_subnets[*].id
     customer_dns_ips  = var.ad_dns_ips
     customer_username = var.ad_connector_username
   }
-  password = var.ad_connector_password
   tags = {
     Name        = "WorkSpaces-AD-Connector"
     Environment = var.environment
